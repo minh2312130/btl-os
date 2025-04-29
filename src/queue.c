@@ -10,12 +10,12 @@ int empty(struct queue_t* q) {
 void enqueue(struct queue_t* q, struct pcb_t* proc) {
     /* TODO: put a new process to queue [q] */
     if (q == NULL) {
-        fprintf(stderr, "Error: Queue does not exist.\n")
+        fprintf(stderr, "Error: Queue does not exist.\n");
             return;
     }
 
     if (proc == NULL) {
-        fprintf(stderr, "Error: Process does not exist.\n")
+        fprintf(stderr, "Error: Process does not exist.\n");
             return;
     }
 
