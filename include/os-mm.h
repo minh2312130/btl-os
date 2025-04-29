@@ -21,6 +21,8 @@ struct pgn_t{
 struct vm_rg_struct {
    unsigned long rg_start;
    unsigned long rg_end;
+   // add vmaid
+   //unsigned long vmaid;
 
    struct vm_rg_struct *rg_next;
 };
