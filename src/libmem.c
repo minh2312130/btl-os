@@ -94,7 +94,7 @@ int __alloc(struct pcb_t *caller, int vmaid, int rgid, int size, int *alloc_addr
   /*Attempt to increate limit to get space */
   struct vm_area_struct *cur_vma = get_vma_by_num(caller->mm, vmaid);
   
-  int inc_sz = PAGING_PAGE_ALIGNSZ(size);
+  //int inc_sz = PAGING_PAGE_ALIGNSZ(size);
   //int inc_limit_ret;
 
   /* TODO retrive old_sbrk if needed, current comment out due to compiler redundant warning*/
@@ -214,7 +214,7 @@ int liballoc(struct pcb_t *proc, uint32_t size, uint32_t reg_index)
   #ifdef PAGETBL_DUMP
   print_pgtbl(proc, 0, -1); //print max TBL
 #endif
-  MEMPHY_dump(proc->mram);
+  //MEMPHY_dump(proc->mram);
 #endif
   printf("================================================================\n");
   /* By default using vmaid = 0 */
@@ -245,7 +245,7 @@ int libfree(struct pcb_t *proc, uint32_t reg_index)
   print_pgtbl(proc, 0, -1); //print max TBL
   
 #endif
-  MEMPHY_dump(proc->mram);
+  //MEMPHY_dump(proc->mram);
 #endif
   printf("================================================================\n");
   /* By default using vmaid = 0 */
@@ -348,7 +348,7 @@ int pg_getpage(struct mm_struct *mm, int pgn, int *fpn, struct pcb_t *caller)
 int pg_getval(struct mm_struct *mm, int addr, BYTE *data, struct pcb_t *caller)
 {
   int pgn = PAGING_PGN(addr);
-  int off = PAGING_OFFST(addr);
+  //int off = PAGING_OFFST(addr);
   int fpn;
 
     
@@ -390,7 +390,7 @@ int pg_getval(struct mm_struct *mm, int addr, BYTE *data, struct pcb_t *caller)
 int pg_setval(struct mm_struct *mm, int addr, BYTE value, struct pcb_t *caller)
 {
   int pgn = PAGING_PGN(addr);
-  int off = PAGING_OFFST(addr);
+  //int off = PAGING_OFFST(addr);
   int fpn;
 
   /* Get the page to MEMRAM, swap from MEMSWAP if needed */
