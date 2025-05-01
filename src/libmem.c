@@ -215,8 +215,9 @@ int liballoc(struct pcb_t *proc, uint32_t size, uint32_t reg_index)
   print_pgtbl(proc, 0, -1); //print max TBL
 #endif
   //MEMPHY_dump(proc->mram);
-#endif
   printf("================================================================\n");
+#endif
+  
   /* By default using vmaid = 0 */
   return can_alloc;
 }
@@ -246,8 +247,9 @@ int libfree(struct pcb_t *proc, uint32_t reg_index)
   
 #endif
   //MEMPHY_dump(proc->mram);
-#endif
   printf("================================================================\n");
+#endif
+  
   /* By default using vmaid = 0 */
   return can_free;
 }

@@ -109,12 +109,10 @@ static void * ld_routine(void * args) {
 #else
 	struct timer_id_t * timer_id = (struct timer_id_t*)args;
 #endif
-
 	int i = 0;
 	printf("ld_routine\n");
 	while (i < num_processes) {
 		struct pcb_t * proc = load(ld_processes.path[i]);
-		
 #ifdef MLQ_SCHED
 		proc->prio = ld_processes.prio[i];
 #endif
@@ -274,5 +272,19 @@ int main(int argc, char * argv[]) {
 
 }
 
+int get_time_slot(){
+return time_slot;
+}
 
 
+
+/*
+int a[100]; // 400 byte 
+int main(){
+	int *b = malloc(sizeof(int) * 100); // 400 byte
+	static int a1[75];	// 300 byte
+	int *b1 = malloc(sizeof(int) * 75); // 300 byte
+	return 0;
+}
+
+*/
