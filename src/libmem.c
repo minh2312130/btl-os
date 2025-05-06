@@ -186,6 +186,7 @@ int __free(struct pcb_t *caller, int vmaid, int rgid)
   }
   //
   if(enlist_vm_freerg_list(caller->mm, temp)!=0){
+    free(temp); 
     return -1;
   }
 
