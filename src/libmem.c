@@ -175,9 +175,14 @@ int __free(struct pcb_t *caller, int vmaid, int rgid)
     if(find!=0){
       if(prev==NULL){
         caller->mm->mmap->vm_freerg_list = run->rg_next;
+        free(run);  
+        run = caller->mm->mmap->vm_freerg_list;
+        continue;
       }
       else{
         prev->rg_next = run->rg_next;
+        free(run);
+        run = prev;
       }
       find--;
     }
