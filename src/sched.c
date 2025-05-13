@@ -57,23 +57,39 @@ struct pcb_t * get_mlq_proc(void) {
 	/*TODO: get a process from PRIORITY [ready_queue].
 	 * Remember to use lock to protect the queue.
 	 * */
-	
+	static int used_slot[MAX_PRIO] = {0}; 
+ 
 	pthread_mutex_lock(&queue_lock);
-	
-	period_check();
-	
-	int cursor;
-	for(cursor = 0;cursor < MAX_PRIO; ++cursor){
-		if ((empty(&mlq_ready_queue[cursor]) == 0) && (slot[cursor] > 0)){
-			proc = dequeue(&mlq_ready_queue[cursor]);
-			slot[cursor] = slot[cursor] - 1;
-			break;
+ 
+	for (int prio = 0; prio < MAX_PRIO; prio++) {
+		if (!empty(&mlq_ready_queue[prio])) {
+			if (used_slot[prio] < (MAX_PRIO - prio)) {
+				proc = dequeue(&mlq_ready_queue[prio]);
+				used_slot[prio]++;
+				pthread_mutex_unlock(&queue_lock);
+				return proc;
+			}
 		}
 	}
+	//neu khong tim duoc proc nao thi reset lai used_slot
+	for (int i = 0; i < MAX_PRIO; i++) {
+		used_slot[i] = 0;
+	}
+ 
+	for (int prio = 0; prio < MAX_PRIO; prio++) {
+		if (!empty(&mlq_ready_queue[prio])) {
+			proc = dequeue(&mlq_ready_queue[prio]);
+			used_slot[prio]++;
+			pthread_mutex_unlock(&queue_lock);
+			return proc;
+		}
+	}
+ 
 	pthread_mutex_unlock(&queue_lock);
-	//return is fine 
-	return proc;	
+	return NULL;
 }
+
+
 
 void put_mlq_proc(struct pcb_t * proc) {
 	pthread_mutex_lock(&queue_lock);
@@ -112,18 +128,6 @@ void add_proc(struct pcb_t * proc) {
 	return add_mlq_proc(proc);
 }
 
-void period_check(){
-//period checking
-     int time_since_last_period= current_time() - last_period * get_time_slot() * sum;
-
-	if (time_since_last_period >= 1 * get_time_slot() * sum){
-		int i;
-		for (i = 0; i < MAX_PRIO ; ++i){
-			slot[i] = MAX_PRIO - i; 
-		}
-		last_period=last_period+1;
-	}
-}
 #else
 struct pcb_t * get_proc(void) {
 	struct pcb_t * proc = NULL;
