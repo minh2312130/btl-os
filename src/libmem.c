@@ -162,8 +162,10 @@ int __free(struct pcb_t *caller, int vmaid, int rgid)
   // check continious
   struct vm_rg_struct *run = caller->mm->mmap->vm_freerg_list;
   struct vm_rg_struct *prev = NULL;
-  int find = 0;
-  while(run!=NULL){
+  
+  while(run!=NULL &&(run->rg_start!=0 || run->rg_end!=0)){
+    int find = 0;
+
     if(temp->rg_start == run->rg_end){
       temp->rg_start = run->rg_start;
       find++;
@@ -172,22 +174,24 @@ int __free(struct pcb_t *caller, int vmaid, int rgid)
       temp->rg_end = run->rg_end;
       find++;
     }
+    printf("%lu - %lu",temp->rg_start,temp->rg_end);
     if(find!=0){
+      struct vm_rg_struct * del = run;
+
       if(prev==NULL){
-        caller->mm->mmap->vm_freerg_list = run->rg_next;
-        free(run);  
+        caller->mm->mmap->vm_freerg_list = run->rg_next;  
         run = caller->mm->mmap->vm_freerg_list;
-        continue;
       }
       else{
         prev->rg_next = run->rg_next;
-        free(run);
-        run = prev;
+        run = prev->rg_next;
       }
-      find--;
+      free(del);
     }
-    prev = run;
-    run = run->rg_next;
+    else{
+      prev = run;
+      run = run->rg_next;
+    }
   }
   //
   if(enlist_vm_freerg_list(caller->mm, temp)!=0){
