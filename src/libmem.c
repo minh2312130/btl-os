@@ -174,7 +174,6 @@ int __free(struct pcb_t *caller, int vmaid, int rgid)
       temp->rg_end = run->rg_end;
       find++;
     }
-    printf("%lu - %lu",temp->rg_start,temp->rg_end);
     if(find!=0){
       struct vm_rg_struct * del = run;
 
